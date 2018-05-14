@@ -10,47 +10,47 @@ function process(line) {
 	var hours = Number(line.substring(0, 2));
 	var minutes = Number(line.substring(2, 4));
 
-	var word = "";
+	var word;
 	var difference = minutes;
 	if (minutes <= 30) {
 		word = "past ";
-	} else if (minutes > 30) {
+	} else {
 		word = "to ";
 		difference = 60 - minutes;
 		hours++;
 	}
 
-	if (difference == 1) {
-		difference = "a minute ";
-	} else if (difference == 15) {
-		difference = "a quarter ";
-	} else if (difference == 30) {
-		difference = "half ";
-	} else if (difference == 0) {
-		difference = "";
-		word = "";
-	} else {
-		difference += " minutes ";
+	var phrases = {
+		"0": "",
+		"1": "a minute " + word,
+		"15": "a quarter " + word,
+		"30": "half " + word
 	}
 
-	var m = "am";
-	if (hours > 12) {
-		hours -= 12;
-		m = "pm";
+	if (difference != 1 && difference % 15 != 0) {
+		difference += " minutes " + word;
+	} else {
+		difference = phrases[difference];
 	}
-	if ((hours == 0 && m == "am") || (hours == 12 && m == "pm")) {
-		m = " midnight";
+
+	var periods = ["am", "pm"];
+	m = periods[Math.floor(hours / 12) % 2];
+	hours = hours % 12;
+
+	if (hours == 0) {
 		hours = 12;
-	} else if ((hours == 0 && m == "pm") || (hours == 12 && m == "am")) {
+		if (m == "am") {
+			m = "pm";
+		} else {
+			m = "am";
+		}
+	}
+
+	if (hours + m == "12pm") {
+		m = " midnight";
+	} else if (hours + m == "12am") {
 		m = " noon";
 	}
 
-	console.log(line + " is " + difference + word + hours + m);
-}
-
-function toggle(m) {
-	if (m == "am") {
-		return "pm";
-	}
-	return "am";
+	console.log(line + " is " + difference + hours + m);
 }
