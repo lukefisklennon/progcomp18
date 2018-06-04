@@ -12,13 +12,17 @@ function process(line) {
 
 	var word;
 	var difference = minutes;
-	if (minutes <= 30) {
-		word = "past ";
-	} else {
-		word = "to ";
-		difference = 60 - minutes;
-		hours++;
-	}
+	var functions = [
+		function() {
+			word = "past ";
+		},
+		function() {
+			word = "to ";
+			difference = 60 - minutes;
+			hours++;
+		}
+	]
+	functions[Math.floor((Math.abs(minutes - 1)) / 30) % 2]();
 
 	var phrases = {
 		"0": "",
@@ -37,19 +41,28 @@ function process(line) {
 	m = periods[Math.floor(hours / 12) % 2];
 	hours = hours % 12;
 
-	if (hours == 0) {
-		hours = 12;
-		if (m == "am") {
-			m = "pm";
-		} else {
-			m = "am";
-		}
+	var toggle = {
+		"am": "pm",
+		"pm": "am"
+	}
+	var functions = [
+		function() {
+			hours = 12;
+			m = toggle[m];
+		},
+		function() {}
+	]
+	functions[Math.ceil(hours / 12)]();
+
+	var names = {
+		"12pm": " midnight",
+		"12am": " noon"
 	}
 
-	if (hours + m == "12pm") {
-		m = " midnight";
-	} else if (hours + m == "12am") {
-		m = " noon";
+	var string = hours + m;
+
+	if (string in names) {
+		m = names[string];
 	}
 
 	console.log(line + " is " + difference + hours + m);

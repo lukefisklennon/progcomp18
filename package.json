@@ -3,5 +3,7 @@
   "version": "1.0.0",
   "description": "ProgComp 2018 practice files",
   "author": "Luke Fisk-Lennon",
-  "dependencies": {}
+  "dependencies": {
+    "progress": "^2.0.0"
+  }
 }
