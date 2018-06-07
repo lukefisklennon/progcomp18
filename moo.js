@@ -1,46 +1,31 @@
-var logging = false;
-var stats = [];
+var candidates = fillCandidates();
+console.log("Initial candidate list size = " + candidates.length + ".");
 
-var secretNumbers = fillCandidates();
+var secret = 12748856;
 
-for (var i = 0; i < secretNumbers.length; i++) {
-	var candidates = fillCandidates();
-	if (logging) console.log("Initial candidate list size = " + candidates.length + ".");
-
-	var secret = encode(secretNumbers[i]);
-
-	var correct = false;
-	var guessNumber = 0;
-	var lastGuess = null;
-	while (true) {
-		guessNumber++;
-		var guess = middleCandidate(candidates);
-		var result = match(encode(guess), secret);
-		candidates = filterCandidates(candidates, guess, result);
-		if (logging) console.log("Guess " + guessNumber + " " + guess + " gives " + result + " ".repeat(5 - result.length) + "Candidates remaining: " + candidates.length);
-		if (candidates.length <= 1) {
-			if (logging) console.log("Solution: " + candidates[0]);
-			break;
-		}
-		if (lastGuess != null && guess == lastGuess) {
-			break;
-		}
-		lastGuess = guess;
+var correct = false;
+var guessNumber = 0;
+var lastGuess = null;
+while (true) {
+	guessNumber++;
+	var guess = middleCandidate(candidates);
+	var result = match(encode(guess), secret);
+	candidates = filterCandidates(candidates, guess, result);
+	console.log("Guess " + guessNumber + " " + guess + " gives " + result + " ".repeat(5 - result.length) + "Candidates remaining: " + candidates.length);
+	if (candidates.length <= 1) {
+		console.log("Solution: " + candidates[0]);
+		break;
 	}
-
-	stats.push(guessNumber);
-}
-
-if (!logging) {
-	for (var i = 0; i < secretNumbers.length; i++) {
-		console.log(secretNumbers[i] + " took " + stats[i] + " guesses");
+	if (lastGuess != null && guess == lastGuess) {
+		break;
 	}
+	lastGuess = guess;
 }
 
 function encode(g) {
 	var k = 0;
 	var r = 0;
-	var digits = String(g).split("");
+	var digits = stringify(g).split("");
 	for (var k = 0; k < digits.length; k++) {
 		var c = Number(digits[k]);
 		var d = (3 * c + 7) % 10;
