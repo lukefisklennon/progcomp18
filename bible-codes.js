@@ -24,16 +24,16 @@ var results = [];
 
 for (var z = 0; z < iterations; z++) {
 	// var text = original;
-	// if (!puzzle) var array = text.split("");
+	if (!puzzle) var array = text.split("");
 
 	offset = parseInt(process.argv[2]) + z + 1;
 
 	var reverse = false;
-	// if (cycle < 0) {
-	// 	reverse = true;
-	// 	cycle *= -1;
-	// 	offset -= cycle * length;
-	// }
+	if (cycle < 0) {
+		reverse = true;
+		cycle *= -1;
+		offset -= cycle * length;
+	}
 
 	var els = "";
 	// var test = "";
@@ -48,7 +48,7 @@ for (var z = 0; z < iterations; z++) {
 			if (j >= offset && (j - offset) % cycle == 0) {
 				if (els.length < length) {
 					els += text[i].toLowerCase();
-					// if (!puzzle) array[i] = "[" + array[i] + "]";
+					if (!puzzle) array[i] = "[" + array[i] + "]";
 				} else {
 					broken = true;
 					break;
@@ -59,33 +59,33 @@ for (var z = 0; z < iterations; z++) {
 
 	if (!broken) iterations = j;
 
-	// if (!puzzle) {
-	// 	var text = array.join("");
-	// 	var lines = text.split("\n");
-	//
-	// 	for (var i = 0; i < lines.length; i++) {
-	// 		if (lines[i].indexOf("[") != -1 && lines[i].indexOf("]") != -1) {
-	// 			console.log(lines[i]);
-	// 		}
-	// 	}
-	// }
+	if (!puzzle) {
+		var text = array.join("");
+		var lines = text.split("\n");
 
-	// var final = "";
-	// if (reverse) {
-	// 	for (var i = 0; i < els.length; i++) {
-	// 		final = els[i] + final;
-	// 	}
-	// } else {
-	// 	final = els;
-	// }
+		for (var i = 0; i < lines.length; i++) {
+			if (lines[i].indexOf("[") != -1 && lines[i].indexOf("]") != -1) {
+				console.log(lines[i]);
+			}
+		}
+	}
 
-	// if (puzzle) {
+	var final = "";
+	if (reverse) {
+		for (var i = 0; i < els.length; i++) {
+			final = els[i] + final;
+		}
+	} else {
+		final = els;
+	}
+
+	if (puzzle) {
 		if (els.indexOf("iva") == 0) {
 			results.push(els);
 		}
-	// } else {
-	// 	console.log("\n" + els);
-	// }
+	} else {
+		console.log("\n" + els);
+	}
 }
 
 console.log(results);
