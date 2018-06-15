@@ -1,8 +1,7 @@
-var input = require("./input.js");
-
 go();
 
 function go() {
+	var input = require("./input.js");
 	var n = Number(input());
 
 	for (var i = 0; i < n; i++) {

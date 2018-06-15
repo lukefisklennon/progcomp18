@@ -6,9 +6,10 @@ function input(prompt) {
 	if (typeof prompt == "string" && prompt.length > 0) {
 		process.stdout.write(prompt);
 	}
+	var max = 256;
 	if (stdin.length === 0) {
-		var buf = new Buffer(10485760);
-		var totalBuf = new Buffer(10485760);
+		var buf = new Buffer(max);
+		var totalBuf = new Buffer(max);
 		var totalBytesRead = 0;
 		var bytesRead = 0;
 		var endByte = 10;
@@ -21,7 +22,7 @@ function input(prompt) {
 		} catch (e) {}
 		for (;;) {
 			try {
-				bytesRead = fs.readSync(fd, buf, 0, 10485760, null);
+				bytesRead = fs.readSync(fd, buf, 0, max, null);
 				var tmpBuf = new Buffer(totalBytesRead + bytesRead);
 				totalBuf.copy(tmpBuf, 0, 0, totalBytesRead);
 				buf.copy(tmpBuf, totalBytesRead, 0, bytesRead);
@@ -33,12 +34,12 @@ function input(prompt) {
 						break;
 					}
 				}
-				if (endByteRead) { break; }
+				if (endByteRead) break;
 			} catch (e) {
-				if (e.code === "EOF") { break; }
+				if (e.code === "EOF") break;
 				throw e;
 			}
-			if (bytesRead === 0) { break; }
+			if (bytesRead === 0) break;
 		}
 		if (usingDevice) { fs.closeSync(fd); }
 		stdin = totalBuf.toString("utf-8");
