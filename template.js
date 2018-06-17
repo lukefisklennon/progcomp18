@@ -13,7 +13,7 @@ function go() {
 	function process(line) {
 		// ...
 	}
-});
+};
 
 function permutations(a, callback, n) {
 	n = n || a.length;
